@@ -175,7 +175,9 @@ git merge nome-da-branch
 ##### 🏃🏼‍➡️ Passo a Passo do Merge
 
 0. Estado atual
-
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Willian-Brito/aiko-learning-client/refs/heads/main/src/assets/prints/logo.png"/>
+</div>
 1. Cria o merge commit
 
 2. Aponta para os últimos commits das branchs origem/destino
