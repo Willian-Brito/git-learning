@@ -147,6 +147,28 @@ git checkout nome-da-branch
 git switch nome-da-branch
 ```
 
+### 🧳 Guardando alterações temporariamente
+O `git stash` é usado para salvar modificações locais não commitadas (em tracked files) de forma temporária, "limpando" seu diretório de trabalho para que você possa trocar de branch ou trabalhar em outra tarefa.
+
+```bash
+git stash # Aplicar as alterações (mais recente) sem removê-las do stash
+git stash list # listar os stashes salvos
+git stash apply stash@{2} # Aplicar um stash específico
+git stash branch nova-branch stash@{0} # Criar uma nova branch a partir de um stash
+git stash pop stash@{0} # Aplicar as alterações removendo do stash
+```
+### 🧹 Remover arquivos não rastreados
+O `git clean` é usado para deletar arquivos e diretórios não rastreados pelo Git — ou seja, que nunca foram adicionados com `git add`.
+
+⚠️ **Cuidado:** Esse comando deleta arquivos para sempre, sem mover para o stash ou lixeira.
+
+```bash
+git clean -n # Ver o que será apagado (modo seguro)
+git clean -f # Remover arquivos não rastreados
+git clean -fd # Remover arquivos e diretórios não rastreados
+git clean -f -d  # Limpar apenas diretórios
+```
+
 ### 🔀 Mesclar branches (Merge vs. Rebase)
 
 #### 🧩 O que é git merge?
@@ -172,15 +194,22 @@ git merge nome-da-branch
 - É difícil de **reverter** um merge commit (reverte o histórico)
 - **Ideal** para trabalho em **time** na mesma branch
 
-##### 🏃🏼‍➡️ Passo a Passo do Merge
+#### 🏃🏼‍➡️ Passo a Passo do Merge
 
-0. Estado atual
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Willian-Brito/aiko-learning-client/refs/heads/main/src/assets/prints/logo.png"/>
+**1. Estado atual**
+<div>
+  <img src="https://raw.githubusercontent.com/Willian-Brito/git-learning/refs/heads/master/prints/Merge%20-%20passo1.png"/>
 </div>
-1. Cria o merge commit
 
-2. Aponta para os últimos commits das branchs origem/destino
+**2. Cria o merge commit**
+<div>
+  <img src="https://raw.githubusercontent.com/Willian-Brito/git-learning/refs/heads/master/prints/Merge%20-%20passo2.png"/>
+</div>
+
+**3. Aponta para os últimos commits das branchs origem/destino**
+<div>
+  <img src="https://raw.githubusercontent.com/Willian-Brito/git-learning/refs/heads/master/prints/Merge%20-%20passo3.png"/>
+</div>
 
 #### 🔄 O que é git rebase?
 O comando git rebase pega os commits de uma branch e "reaplica" eles sobre outra branch, criando um histórico linear.
@@ -207,14 +236,22 @@ git rebase main
 - Histórico mais **limpo** e alinhado
 - **Difícil** de trabalhar de trabalhar em **time** na mesa branch
 
-##### 🏃🏼‍➡️ Passo a Passo do Rebase
+#### 🏃🏼‍➡️ Passo a Passo do Rebase
 
-0. Estado atual
+**1. Estado atual**
+<div>
+  <img src="https://raw.githubusercontent.com/Willian-Brito/git-learning/refs/heads/master/prints/Merge%20-%20passo1.png"/>
+</div>
 
-1. Reaponta o histórico de commits para o último commit da branch destino
+**2. Reaponta o histórico de commits para o último commit da branch destino**
+<div>
+  <img src="https://raw.githubusercontent.com/Willian-Brito/git-learning/refs/heads/master/prints/Rebase%20-%20passo1.png"/>
+</div>
 
-2. Atualiza a HEAD e o histórico passa a fazer parte da branch destino
-
+**3. Atualiza a HEAD e o histórico passa a fazer parte da branch destino**
+<div>
+  <img src="https://raw.githubusercontent.com/Willian-Brito/git-learning/refs/heads/master/prints/Rebase%20-%20passo2.png"/>
+</div>
 
 #### 🆚 Diferença entre `merge` e `rebase`
 
@@ -287,6 +324,173 @@ git reset --hard HEAD~1
 ```bash
 git remote add origin https://github.com/usuario/repositorio.git
 git push -u origin main
+```
+
+## 🪝 Git Hooks
+Git Hooks são scripts que o Git executa automaticamente em eventos específicos, como antes de um commit ou após um push. Eles são ideais para automações como:
+
+- Validações antes de um commit
+- Formatadores de código
+- Execução de testes
+- Integrações com ferramentas de CI/CD
+- Diretório `.git/hooks`
+
+## 🔖 Git Tagging
+Tags servem para marcar pontos importantes no histórico, como releases (v1.0.0, por exemplo).
+
+### ✅ Criar uma tag leve:
+
+```bash
+git tag v1.0.0
+```
+
+### 📝 Criar uma tag anotada (com mensagem e metadados):
+```bash
+git tag -a v1.0.0 -m "Primeira versão estável"
+```
+
+### 📤 Enviar tags para o repositório remoto:
+```bash
+git push origin v1.0.0
+git push --tags # Enviar todas as tags
+```
+
+### 🔍 Ver todas as tags:
+```bash
+git tag
+```
+
+## 📦 Git Submodules
+Submodules permitem incluir outro repositório Git dentro de um repositório principal, útil para projetos que compartilham bibliotecas ou módulos reutilizáveis.
+
+### ➕ Adicionar um submódulo:
+```bash
+git submodule add https://github.com/usuario/projeto-biblioteca libs/biblioteca
+```
+**Isso:**
+- Clona o repositório dentro do diretório libs/biblioteca
+- Cria um arquivo .gitmodules para registrar a referência
+
+### 📥 Clonar repositório com submódulos:
+```bash
+git clone https://github.com/usuario/projeto-principal.git --recurse-submodules # Clona, Inicia e Atualiza submodules
+```
+**Ou:**
+```bash
+git clone https://github.com/usuario/projeto-principal.git # Clona submodule
+git submodule init # Inicia submodule
+git submodule update # Atualiza submodule
+```
+
+### 🔄 Atualizar submódulo para a última versão da branch remota:
+```bash
+cd libs/biblioteca
+git checkout main
+git pull
+cd ../..
+```
+
+## 🧬 Git LFS (Large File Storage)
+Git LFS é uma extensão para o Git que permite versionar arquivos grandes (como imagens, vídeos, modelos, binários) de forma eficiente, sem comprometer o desempenho do repositório.
+
+### 🧠 Por que usar?
+O Git foi projetado para versionar código-fonte e arquivos de texto, e não lida bem com arquivos binários grandes ou frequentemente alterados. O Git LFS resolve isso ao:
+
+- Armazenar referências no Git (um ponteiro pequeno)
+- Armazenar o conteúdo real em um repositório remoto separado
+
+### 🔧 Como usar?
+
+```bash
+ # 1. Instale o Git LFS:
+git lfs install
+
+# 2. Adicione arquivos ao controle do LFS (Isso cria ou atualiza um arquivo .gitattributes):
+git lfs track "*.psd" 
+
+# 3. Adicione os arquivos normalmente:
+git add arquivo.psd
+git commit -m "Adiciona arquivo grande com Git LFS"
+git push
+```
+⚠️ Requer que o repositório remoto também tenha suporte ao Git LFS (como GitHub, GitLab, Bitbucket).
+
+## 📦 Git Bundle (Bundling)
+**Git Bundling** permite empacotar todo o histórico de um repositório Git em um único arquivo `.bundle`, útil para:
+
+- Backup
+- Transferência via pen drive ou rede offline
+- Envio de código onde não é possível usar `git push`
+
+### 📁 Como criar um bundle
+```bash
+git bundle create meu-repo.bundle --all
+```
+- Isso gera um arquivo meu-repo.bundle com todo o histórico e branches do repositório.
+- Você também pode limitar a um branch:
+
+```bash
+git bundle create meu-repo.bundle main
+```
+
+### 📥 Como clonar a partir de um bundle
+```bash
+git clone meu-repo.bundle -b main novo-diretorio
+```
+- Você pode usar esse bundle como uma origem remota temporária:
+
+```bash
+git remote add offline ../meu-repo.bundle
+git fetch offline
+```
+
+## 🍒 Git Cherry Pick
+O comando `git cherry-pick` permite aplicar commits específicos de outra branch à branch atual, sem fazer merge completo. É como escolher “a dedo” (daí o nome cherry-pick) quais commits você quer trazer de uma branch para outra.
+
+### ✅ Quando usar?
+- Quando você quer aplicar um bugfix específico feito em outra branch.
+- Quando várias features estão em desenvolvimento, mas você só quer trazer uma para a main (sem trazer o restante).
+- Para reutilizar commits isolados sem fazer merge de branches inteiras.
+
+#### 📌 Exemplo básico
+Suponha que você está na branch main, e quer aplicar um commit que está na branch feature-x.
+
+**1. Liste os commits da branch `feature-x`:**
+
+```bash
+git log feature-x
+```
+**Você verá algo assim:**
+```bash
+commit a1b2c3d4 - Corrige problema de login
+commit e5f6g7h8 - Adiciona botão
+```
+
+**2. Aplique o commit na sua branch atual `main`:**
+```bash
+git cherry-pick a1b2c3d4 # Isso cria um novo commit na sua branch com o mesmo conteúdo daquele commit.
+```
+
+### 🔀 Cherry-pick de múltiplos commits
+```bash
+git cherry-pick commit1 commit2
+```
+**Ou um intervalo:**
+```bash
+git cherry-pick a1b2c3d4^..e5f6g7h8 # O ^ indica o commit anterior ao primeiro da sequência.
+```
+
+### ⚠️ Possíveis conflitos
+- Se houver conflitos durante o cherry-pick, o Git irá pausá-lo e pedir para você resolvê-los manualmente.
+- Após resolver os conflitos:
+```bash
+git add .
+git cherry-pick --continue
+```
+
+**Se quiser cancelar:**
+```bash
+git cherry-pick --abort
 ```
 
 ## ✅ Conclusão
