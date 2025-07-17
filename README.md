@@ -9,10 +9,10 @@ O **Git** é um sistema de controle de versão distribuído, usado para rastrear
 
 ## 🚀 Por que usar o Git?
 
-- Histórico de versões de código
-- Trabalhar em equipe de forma eficiente
-- Possibilidade de ramificação (branches) para desenvolvimento de novas funcionalidades sem afetar o código principal
-- Integração com plataformas como GitHub, GitLab e Bitbucket
+- Histórico de versões de código.
+- Trabalhar em equipe de forma eficiente.
+- Possibilidade de ramificação (branches) para desenvolvimento de novas funcionalidades sem afetar o código principal.
+- Integração com plataformas como GitHub, GitLab e Bitbucket.
 
 ## 🧠 Conceitos Fundamentais do Git
 
